@@ -1,0 +1,70 @@
+version: '3.4'
+
+name: ping-wallet
+
+services:
+    wallet.api:
+        image: ${DOCKER_REGISTRY-}walletapi
+        build:
+            context: .
+            dockerfile: Wallet.api/Dockerfile
+        ports:
+            - "2020:80"
+            - "2021:443"
+        depends_on:
+            - postgres-db
+            - redis
+        networks:
+            - wallet
+
+    postgres-db:
+        image: postgres:14
+        ports: ["5445:5432"]
+        environment:
+            POSTGRES_DB: wallet
+            POSTGRES_USER: wallet
+            POSTGRES_PASSWORD: wallet
+        command: postgres -c 'log_statement=all' -c 'max_connections=500'
+        volumes:
+            - "./logs:/var/lib/postgresql/logs:rw"
+        deploy:
+            resources:
+                limits:
+                    memory: 100M
+                reservations:
+                    memory: 50M
+        healthcheck:
+            test: ["CMD-SHELL", "sh -c 'pg_isready -U wallet -d wallet'"]
+            interval: 10s
+            timeout: 3s
+            retries: 3
+        networks:
+            - wallet
+
+    wallet-migrations:
+        image: liquibase/liquibase:4.18
+        command:
+            - "--url=jdbc:postgresql://postgres-db/wallet"
+            - "--username=wallet"
+            - "--password=wallet"
+            - "--changeLogFile=index.xml"
+            - "update"
+        networks:
+            - wallet
+        volumes:
+            - "./Database:/liquibase/changelog"
+        depends_on:
+            postgres-db:
+                condition: service_healthy
+
+    redis:
+        image: redis:latest
+        restart: always
+        ports:
+            - '6379:6379'
+        networks:
+            - wallet
+        
+networks:
+    wallet:
+        name: wallet

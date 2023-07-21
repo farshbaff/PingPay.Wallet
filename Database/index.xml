@@ -1,0 +1,8 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <include file="v1/2023-07-21-01-initial.xml" relativeToChangelogFile="true"/>
+    <include file="v1/2023-07-21-02-seeds.xml" relativeToChangelogFile="true"/>
+    <include file="v1/2023-07-21-03-functions.xml" relativeToChangelogFile="true"/>
+    <include file="v1/2023-07-21-04-constraints.xml" relativeToChangelogFile="true"/>
+</databaseChangeLog>

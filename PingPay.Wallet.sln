@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33723.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wallet.Api", "Wallet.Api\Wallet.Api.csproj", "{540774BE-A421-4AF9-9BC1-7D659AA2D341}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wallet.Tests", "Wallet.Tests\Wallet.Tests.csproj", "{E11F5542-2771-449D-B398-C70A5C77BCEC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{193D51B4-B542-4E97-98A0-B1A9AE672233}"
+	ProjectSection(SolutionItems) = preProject
+		nuget.config = nuget.config
+		ReadMe.md = ReadMe.md
+	EndProjectSection
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{915D4806-0915-4BDE-9943-60F6153FCCB8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{540774BE-A421-4AF9-9BC1-7D659AA2D341}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{540774BE-A421-4AF9-9BC1-7D659AA2D341}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{540774BE-A421-4AF9-9BC1-7D659AA2D341}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{540774BE-A421-4AF9-9BC1-7D659AA2D341}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E11F5542-2771-449D-B398-C70A5C77BCEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E11F5542-2771-449D-B398-C70A5C77BCEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E11F5542-2771-449D-B398-C70A5C77BCEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E11F5542-2771-449D-B398-C70A5C77BCEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{915D4806-0915-4BDE-9943-60F6153FCCB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{915D4806-0915-4BDE-9943-60F6153FCCB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{915D4806-0915-4BDE-9943-60F6153FCCB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{915D4806-0915-4BDE-9943-60F6153FCCB8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0E702AB1-4117-463D-9238-5B328B496D9E}
+	EndGlobalSection
+EndGlobal

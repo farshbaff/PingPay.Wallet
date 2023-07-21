@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+  <changeSet author="M.Farshbaf" id="2023-07-17-add-transaction-type">
+    <validCheckSum>ANY</validCheckSum>
+
+    <sql splitStatements="false" stripComments="false">
+      INSERT INTO transaction_type (id, name)
+      VALUES
+        (1, 'Deposit'),
+        (2, 'Withdrawal'),
+        (3, 'Lock'),
+        (4, 'Release'),
+        (5, 'Settlement')
+      ON CONFLICT (id) DO NOTHING;
+    </sql>
+  </changeSet>
+</databaseChangeLog>

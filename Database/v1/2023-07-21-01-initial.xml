@@ -1,0 +1,104 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="M.Farshbaf (generated)" id="1689751105862-1">
+        <createTable tableName="users">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="users_pkey"/>
+            </column>
+            <column name="user_uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueBoolean="false" name="locked" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="now()" name="created_at" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="M.Farshbaf (generated)" id="1689751105862-3">
+        <createTable tableName="wallet">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="wallet_pkey"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="amount" type="numeric(20, 8)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="total_locked_amount" type="numeric(20, 8)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueBoolean="false" name="locked" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="row_version" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="now()" name="created_at" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="M.Farshbaf (generated)" id="1689751105862-4">
+        <createTable tableName="transaction">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="transaction_pkey"/>
+            </column>
+            <column name="wallet_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="transaction_type" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="amount" type="numeric(20, 8)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="correlation_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(500)"/>
+            <column defaultValueComputed="now()" name="created_at" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="M.Farshbaf (generated)" id="1689751105862-8">
+        <createTable tableName="transaction_type">
+            <column name="id" type="SMALLINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="transaction_type_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="M.Farshbaf (generated)" id="1689751105862-9">
+        <createIndex indexName="unique_users_user_uuid_idx" tableName="users" unique="true">
+            <column name="user_uuid"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="M.Farshbaf (generated)" id="1689751105862-11">
+        <createIndex indexName="unique_wallet_user_idx" tableName="wallet" unique="true">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="M.Farshbaf (generated)" id="1689751105862-12">
+        <createIndex indexName="unique_transaction_correlation_id_idx" tableName="transaction" unique="true">
+            <column name="correlation_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="M.Farshbaf (generated)" id="1689751105862-18">
+        <addUniqueConstraint columnNames="name" constraintName="transaction_type_name_key" tableName="transaction_type"/>
+    </changeSet>
+    <changeSet author="M.Farshbaf (generated)" id="1689751105862-20">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="wallet" constraintName="wallet_user_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
+    <changeSet author="M.Farshbaf (generated)" id="1689751105862-23">
+        <addForeignKeyConstraint baseColumnNames="wallet_id" baseTableName="transaction" constraintName="transaction_wallet_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="wallet" validate="true"/>
+    </changeSet>
+    <changeSet author="M.Farshbaf (generated)" id="1689751105862-25">
+        <addForeignKeyConstraint baseColumnNames="transaction_type" baseTableName="transaction" constraintName="transaction_transaction_type_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="transaction_type" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

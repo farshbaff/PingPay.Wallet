@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+  <changeSet author="M.Farshbaf" id="2023-07-17-constraint-non_negative_amount">
+    <validCheckSum>ANY</validCheckSum>
+    <sql splitStatements="false" stripComments="false">
+        ALTER TABLE wallet ADD CONSTRAINT non_negative_amount CHECK (amount &gt;= 0);
+    </sql>
+  </changeSet>
+  <changeSet author="M.Farshbaf" id="2023-07-17-add-constraint-locked_amount">
+    <validCheckSum>ANY</validCheckSum>
+    <sql splitStatements="false" stripComments="false">
+        ALTER TABLE wallet ADD CONSTRAINT locked_amount CHECK (total_locked_amount &gt;= 0 AND total_locked_amount &lt;= amount);
+    </sql>
+  </changeSet>
+</databaseChangeLog>
