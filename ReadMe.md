@@ -51,7 +51,7 @@ To start the API and Postgres database Docker containers, run the following comm
 docker-compose up
 ```
 
-The API will be available at http://localhost:8080.
+The API will be available at http://localhost:2020.
 
 ### Stop
 To stop the API and Postgres database Docker containers, press CTRL+C in the terminal where they are running.
