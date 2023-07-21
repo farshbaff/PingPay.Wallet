@@ -64,4 +64,4 @@ docker-compose down --rmi all --volumes --remove-orphans
 ```
 
 ## API Documentation
-The API is documented using Swagger. To view the Swagger documentation, go to [http://localhost:8080/swagger/index.html](http://localhost:2020/swagger/index.html) in your web browser.
+The API is documented using Swagger. To view the Swagger documentation, go to [http://localhost:2020/swagger/index.html](http://localhost:2020/swagger/index.html) in your web browser.
