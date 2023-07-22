@@ -20,6 +20,7 @@ public class WalletServiceTests
     private readonly Mock<ITransactionRepository> _mockTransactionRepository;
     private readonly WalletValidatorService _walletValidatorService;
     private readonly WalletService _walletService;
+    private readonly Mock<ITransactionCreatorService> _mockTransactionCreatorService;
 
     public WalletServiceTests()
     {
@@ -30,6 +31,8 @@ public class WalletServiceTests
         _mockWalletRepository = new Mock<IWalletRepository>();
         _mockTransactionRepository = new Mock<ITransactionRepository>();
         _walletValidatorService = new WalletValidatorService();
+        _mockTransactionCreatorService = new Mock<ITransactionCreatorService>();
+        
         _walletService = new WalletService(
             _transactionRequestValidator,
             _lockFundsTransactionRequestValidator,
@@ -37,7 +40,8 @@ public class WalletServiceTests
             _mockUserCacheService.Object,
             _mockWalletRepository.Object,
             _mockTransactionRepository.Object,
-            _walletValidatorService
+            _walletValidatorService,
+            _mockTransactionCreatorService.Object
         );
     }
 
@@ -74,9 +78,11 @@ public class WalletServiceTests
                              .ReturnsAsync(user);
         _mockWalletRepository.Setup(x => x.GetWallet(user.Id))
                              .ReturnsAsync(wallet);
-        _mockTransactionRepository.Setup(x => x.CreateTransaction(It.IsAny<Transaction>()))
-                                  .Returns(Task.FromResult((long)1));
-
+        _mockTransactionCreatorService.Setup(x => x.CreateTransaction(It.IsAny<TransactionRequest>(),
+            It.IsAny<WalletApi.Models.Wallet>(), It.IsAny<decimal>())).ReturnsAsync(1L);
+        _mockTransactionCreatorService.Setup(x => x.CreateLockFundsTransaction(It.IsAny<LockFundsTransactionRequest>(),
+            It.IsAny<WalletApi.Models.Wallet>())).ReturnsAsync(1L);
+        
         // Act
         var result = await _walletService.DepositOrWithdraw(request);
 
@@ -88,7 +94,6 @@ public class WalletServiceTests
         _mockTransactionIdempotentService.Verify(x => x.RequestHasAlreadyBeenProcessed(request.CorrelationId, "DepositOrWithdraw"), Times.Once);
         _mockUserCacheService.Verify(x => x.GetUserByUuid(request.UserUuid), Times.Once);
         _mockWalletRepository.Verify(x => x.GetWallet(user.Id), Times.Once);
-        _mockTransactionRepository.Verify(x => x.CreateTransaction(It.IsAny<Transaction>()), Times.Once);
     }
 
     [Fact]

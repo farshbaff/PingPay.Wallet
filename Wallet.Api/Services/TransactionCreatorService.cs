@@ -13,9 +13,9 @@ public class TransactionCreatorService : ITransactionCreatorService
         _transactionRepository = transactionRepository;
     }
 
-    public async Task CreateTransaction(TransactionRequest request, Wallet wallet, decimal transactionAmount)
+    public async Task<long> CreateTransaction(TransactionRequest request, Wallet wallet, decimal transactionAmount)
     {
-        await _transactionRepository.CreateTransaction(new Transaction
+        var transactionId = await _transactionRepository.CreateTransaction(new Transaction
         {
             WalletId = wallet.Id,
             TransactionType = request.TransactionType,
@@ -24,11 +24,13 @@ public class TransactionCreatorService : ITransactionCreatorService
             Description = request.Description,
             CreatedAt = DateTime.UtcNow,
         });
+
+        return transactionId;
     }
 
-    public async Task CreateLockFundsTransaction(LockFundsTransactionRequest request, Wallet wallet)
+    public async Task<long> CreateLockFundsTransaction(LockFundsTransactionRequest request, Wallet wallet)
     {
-        await _transactionRepository.CreateLockFundsTransaction(new LockTransaction
+        var transactionId = await _transactionRepository.CreateLockFundsTransaction(new LockTransaction
         {
             WalletId = wallet.Id,
             TransactionType = TransactionType.Lock,
@@ -38,5 +40,7 @@ public class TransactionCreatorService : ITransactionCreatorService
             CreatedAt = DateTime.UtcNow,
             RemainingLockedAmount = request.Amount,
         });
+
+        return transactionId;
     }
 }
