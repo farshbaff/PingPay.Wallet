@@ -3,7 +3,6 @@ using System.Transactions;
 using WalletApi.Enum;
 using WalletApi.Models;
 using WalletApi.Repositories;
-using WalletApi.Services;
 using Transaction = WalletApi.Models.Transaction;
 
 namespace WalletApi.Services;
@@ -17,11 +16,13 @@ public class WalletService : IWalletService
     private readonly IWalletRepository _walletRepository;
     private readonly ITransactionRepository _transactionRepository;
     private readonly WalletValidatorService _walletValidatorService;
+    private readonly ITransactionCreatorService _transactionCreatorService; 
 
     public WalletService(IValidator<TransactionRequest> transactionRequestValidator, 
         IValidator<LockFundsTransactionRequest> lockFundsTransactionRequestValidator, ITransactionIdempotentService transactionIdempotentService,
         IUserCacheService userCacheService, IWalletRepository walletRepository,
-        ITransactionRepository transactionRepository, WalletValidatorService walletValidatorService)
+        ITransactionRepository transactionRepository, WalletValidatorService walletValidatorService,
+        ITransactionCreatorService transactionCreatorService)
     {
         _transactionRequestValidator = transactionRequestValidator;
         _lockFundsTransactionRequestValidator = lockFundsTransactionRequestValidator;
@@ -30,6 +31,7 @@ public class WalletService : IWalletService
         _walletRepository = walletRepository;
         _transactionRepository = transactionRepository;
         _walletValidatorService = walletValidatorService;
+        _transactionCreatorService = transactionCreatorService;
     }
 
     public async Task<decimal> DepositOrWithdraw(TransactionRequest request)
@@ -59,7 +61,7 @@ public class WalletService : IWalletService
 
             await _walletRepository.UpdateWalletAmount(wallet);
 
-            await CreateTransaction(request, wallet, transactionAmount);
+            await _transactionCreatorService.CreateTransaction(request, wallet, transactionAmount);
 
             transaction.Complete();
         }
@@ -90,7 +92,7 @@ public class WalletService : IWalletService
 
             await _walletRepository.UpdateWalletTotalLockedAmount(wallet);
 
-            await CreateLockFundsTransaction(request, wallet);
+            await _transactionCreatorService.CreateLockFundsTransaction(request, wallet);
 
             transaction.Complete();
         }
@@ -101,32 +103,5 @@ public class WalletService : IWalletService
     public async Task<IEnumerable<Transaction>> GetTransactions(TransactionFilter filter)
     {
         return await _transactionRepository.GetTransactions(filter);
-    }
-
-    private async Task CreateTransaction(TransactionRequest request, Wallet wallet, decimal transactionAmount)
-    {
-        await _transactionRepository.CreateTransaction(new Transaction
-        {
-            WalletId = wallet.Id,
-            TransactionType = request.TransactionType,
-            Amount = transactionAmount,
-            CorrelationId = request.CorrelationId,
-            Description = request.Description,
-            CreatedAt = DateTime.UtcNow,
-        });
-    }
-    
-    private async Task CreateLockFundsTransaction(LockFundsTransactionRequest request, Wallet wallet)
-    {
-        await _transactionRepository.CreateLockFundsTransaction(new LockTransaction
-        {
-            WalletId = wallet.Id,
-            TransactionType = TransactionType.Lock,
-            Amount = request.Amount,
-            CorrelationId = request.CorrelationId,
-            Description = request.Description,
-            CreatedAt = DateTime.UtcNow,
-            RemainingLockedAmount = request.Amount,
-        });
     }
 }

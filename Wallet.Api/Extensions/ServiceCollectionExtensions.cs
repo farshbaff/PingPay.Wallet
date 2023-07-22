@@ -24,6 +24,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IWalletRepository, WalletRepository>();
         services.AddScoped<ITransactionRepository, TransactionRepository>();
         services.AddScoped<WalletValidatorService>();
+        services.AddScoped<ITransactionCreatorService, TransactionCreatorService>();
         services.AddScoped<IWalletService, WalletService>();
         return services;
     }
