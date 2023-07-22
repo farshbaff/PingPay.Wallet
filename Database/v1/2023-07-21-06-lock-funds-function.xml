@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+  <changeSet author="M.Farshbaf" id="2023-07-17-add-lockfunds-function">
+    <validCheckSum>ANY</validCheckSum>
+
+    <sql splitStatements="false" stripComments="false">
+      CREATE OR REPLACE FUNCTION update_lock_transaction_rowversion()
+      RETURNS TRIGGER AS $$
+      BEGIN
+        NEW.row_version = OLD.row_version + 1;
+        RETURN NEW;
+      END;
+      $$ LANGUAGE plpgsql;
+
+      CREATE TRIGGER lock_transaction_update_trigger
+      BEFORE UPDATE ON lock_transaction
+      FOR EACH ROW
+      --WHEN (OLD.* IS DISTINCT FROM NEW.*)
+      EXECUTE FUNCTION update_lock_transaction_rowversion();
+    </sql>
+  </changeSet>
+</databaseChangeLog>

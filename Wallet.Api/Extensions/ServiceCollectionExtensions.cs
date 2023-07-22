@@ -17,6 +17,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddWalletServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IValidator<TransactionRequest>, TransactionRequestValidator>();
+        services.AddScoped<IValidator<LockFundsTransactionRequest>, LockFundsTransactionRequestValidator>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserCacheService, UserCacheService>();
         services.AddScoped<ITransactionIdempotentService, TransactionIdempotentService>();

@@ -34,6 +34,21 @@ public class WalletController : ControllerBase
     }
 
     /// <summary>
+    /// Locks an amount in a user's wallet.
+    /// </summary>
+    /// <param name="request">The lock funds transaction request.</param>
+    /// <returns>The updated total locked amount.</returns>
+    [HttpPost("transaction/lockfunds")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult> LockFundsTransaction(
+        [FromBody][Required] LockFundsTransactionRequest request)
+    {
+        var totalLockedAmount = await _walletService.LockFunds(request);
+        return Ok(totalLockedAmount);
+    }
+    
+    /// <summary>
     /// Get a list of transactions for a user.
     /// </summary>
     /// <param name="userId">The user ID.</param>

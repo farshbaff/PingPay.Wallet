@@ -5,7 +5,7 @@ namespace WalletApi.Services
 {
     public class WalletValidatorService
     {
-        public void ValidateUserExistsAndIsNotLocked(User user, TransactionRequest request)
+        public void ValidateUserExistsAndIsNotLocked(User user, WalletRequest request)
         {
             if (user == null)
             {
@@ -18,7 +18,7 @@ namespace WalletApi.Services
             }
         }
 
-        public void ValidateWalletExistsAndIsNotLocked(Wallet wallet, TransactionRequest request)
+        public void ValidateWalletExistsAndIsNotLocked(Wallet wallet, WalletRequest request)
         {
             if (wallet == null)
             {
@@ -31,9 +31,9 @@ namespace WalletApi.Services
             }
         }
 
-        public void ValidateSufficientFundsForWithydrawal(Wallet wallet, decimal amountToWithdrawal)
+        public void ValidateSufficientFunds(Wallet wallet, decimal transactionAmount)
         {
-            if (wallet.Amount - wallet.TotalLockedAmount < amountToWithdrawal)
+            if (wallet.Amount - wallet.TotalLockedAmount < transactionAmount)
             {
                 throw new InsufficientFundsException();
             }

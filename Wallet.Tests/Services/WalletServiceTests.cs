@@ -13,6 +13,7 @@ namespace Wallet.Tests.Services;
 public class WalletServiceTests
 {
     private readonly IValidator<TransactionRequest> _transactionRequestValidator;
+    private readonly IValidator<LockFundsTransactionRequest> _lockFundsTransactionRequestValidator;
     private readonly Mock<ITransactionIdempotentService> _mockTransactionIdempotentService;
     private readonly Mock<IUserCacheService> _mockUserCacheService;
     private readonly Mock<IWalletRepository> _mockWalletRepository;
@@ -23,6 +24,7 @@ public class WalletServiceTests
     public WalletServiceTests()
     {
         _transactionRequestValidator = new TransactionRequestValidator();
+        _lockFundsTransactionRequestValidator = new LockFundsTransactionRequestValidator();
         _mockTransactionIdempotentService = new Mock<ITransactionIdempotentService>();
         _mockUserCacheService = new Mock<IUserCacheService>();
         _mockWalletRepository = new Mock<IWalletRepository>();
@@ -30,6 +32,7 @@ public class WalletServiceTests
         _walletValidatorService = new WalletValidatorService();
         _walletService = new WalletService(
             _transactionRequestValidator,
+            _lockFundsTransactionRequestValidator,
             _mockTransactionIdempotentService.Object,
             _mockUserCacheService.Object,
             _mockWalletRepository.Object,

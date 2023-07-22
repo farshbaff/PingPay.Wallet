@@ -123,6 +123,21 @@ public class WalletRepository : IWalletRepository
         }
     }
 
+    public async Task UpdateWalletTotalLockedAmount(Wallet wallet)
+    {
+        const string sql = @"
+            UPDATE wallet
+            SET total_locked_amount = @TotalLockedAmount
+            WHERE id = @Id AND row_version = @RowVersion
+        ";
+
+        var rowsUpdated = await _dbConnection.ExecuteAsync(sql, wallet);
+        if (rowsUpdated == 0)
+        {
+            throw new DbUpdateConcurrencyException("Failed to update wallet total locked amount due to concurrency conflict");
+        }
+    }
+
     public async Task<bool> LockWallet(long id)
     {
         const string query = "UPDATE wallet SET locked = true WHERE id = @Id";

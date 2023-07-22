@@ -1,0 +1,39 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="M.Farshbaf (generated)" id="2023-07-17-lock_transaction_table_creation">
+        <createTable tableName="lock_transaction">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="lock_transaction_pkey"/>
+            </column>
+            <column name="transaction_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="remaining_locked_amount" type="numeric(20, 8)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="row_version" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="M.Farshbaf (generated)" id="2023-07-17-lock_transaction_view_creation">
+        <createView fullDefinition="false" viewName="lock_transaction_view">SELECT t.id,
+    t.wallet_id,
+    t.transaction_type,
+    t.amount,
+    t.correlation_id,
+    t.created_at,
+    l.remaining_locked_amount,
+    l.row_version
+   FROM (transaction t
+     JOIN lock_transaction l ON ((t.id = l.transaction_id)));</createView>
+    </changeSet>
+    <changeSet author="M.Farshbaf (generated)" id="2023-07-17-unique_lock_transaction_transaction_id_index">
+        <createIndex indexName="unique_lock_transaction_transaction_id_idx" tableName="lock_transaction" unique="true">
+            <column name="transaction_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="M.Farshbaf (generated)" id="1689751105862-21">
+        <addForeignKeyConstraint baseColumnNames="transaction_id" baseTableName="lock_transaction" constraintName="lock_transaction_transaction_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="transaction" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

@@ -12,4 +12,5 @@ public interface IWalletRepository
     Task<bool> UnlockWallet(long id);
     Task UpdateWallet(Wallet wallet);
     Task UpdateWalletAmount(Wallet wallet);
+    Task UpdateWalletTotalLockedAmount(Wallet wallet);
 }

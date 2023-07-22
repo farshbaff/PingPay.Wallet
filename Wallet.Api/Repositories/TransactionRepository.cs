@@ -25,6 +25,25 @@ public class TransactionRepository : ITransactionRepository
         return await _dbConnection.QuerySingleOrDefaultAsync<long>(sql, transaction);
     }
 
+    public async Task<long> CreateLockFundsTransaction(LockTransaction transaction)
+    {
+        transaction.Id = await CreateTransaction(transaction);
+
+        var lockTransaction = new LockTransaction
+        {
+            TransactionId = transaction.Id,
+            RemainingLockedAmount = transaction.RemainingLockedAmount
+        };
+
+        const string lockSql = @"
+                INSERT INTO lock_transaction (transaction_id, remaining_locked_amount)
+                VALUES (@TransactionId, @RemaininglockedAmount)";
+
+        await _dbConnection.ExecuteAsync(lockSql, lockTransaction);
+
+        return transaction.Id;
+    }
+
     public async Task<Transaction> GetTransaction(long id)
     {
         const string sql = "SELECT * FROM transaction WHERE id = @Id";
